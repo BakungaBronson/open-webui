@@ -23,6 +23,8 @@ class User(Base):
     last_active_at = Column(BigInteger)
     updated_at = Column(BigInteger)
     created_at = Column(BigInteger)
+    
+    message_limit = Column(BigInteger)
 
     api_key = Column(String, nullable=True, unique=True)
     settings = Column(JSONField, nullable=True)
@@ -47,6 +49,8 @@ class UserModel(BaseModel):
     last_active_at: int  # timestamp in epoch
     updated_at: int  # timestamp in epoch
     created_at: int  # timestamp in epoch
+    
+    message_limit: int = 10
 
     api_key: Optional[str] = None
     settings: Optional[UserSettings] = None
