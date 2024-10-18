@@ -376,6 +376,13 @@ async def generate_chat_completion(
     url_idx: Optional[int] = None,
     user=Depends(get_verified_user),
 ):
+    
+    if user.role == "user" and user.message_limit < 1:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail="You have run out of messages",
+        )
+    
     idx = 0
     payload = {**form_data}
 

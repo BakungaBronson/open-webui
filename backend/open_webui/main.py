@@ -1071,6 +1071,13 @@ async def get_models(user=Depends(get_verified_user)):
 
 @app.post("/api/chat/completions")
 async def generate_chat_completions(form_data: dict, user=Depends(get_verified_user)):
+    
+    if user.role == "user" and user.message_limit < 1:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You have run out of messages",
+        )
+    
     model_id = form_data["model"]
 
     if model_id not in app.state.MODELS:
