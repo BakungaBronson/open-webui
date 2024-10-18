@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 
 import aiohttp
 import requests
+from open_webui.apps.webui.models.users import Users
 from open_webui.apps.webui.models.models import Models
 from open_webui.config import (
     CORS_ALLOW_ORIGIN,
@@ -832,6 +833,8 @@ async def generate_chat_completion(
     url = get_ollama_url(url_idx, payload["model"])
     log.info(f"url: {url}")
     log.debug(payload)
+    
+    Users.update_user_message_limit_by_id(user.id, user.message_limit - 1)
 
     return await post_streaming_url(
         f"{url}/api/chat",

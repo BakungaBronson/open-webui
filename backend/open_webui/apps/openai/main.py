@@ -7,6 +7,7 @@ from typing import Literal, Optional, overload
 
 import aiohttp
 import requests
+from open_webui.apps.webui.models.users import Users
 from open_webui.apps.webui.models.models import Models
 from open_webui.config import (
     CACHE_DIR,
@@ -477,6 +478,8 @@ async def generate_chat_completion(
             except Exception as e:
                 log.error(e)
                 response = await r.text()
+                
+            Users.update_user_message_limit_by_id(user.id, user.message_limit - 1)
 
             r.raise_for_status()
             return response
