@@ -260,6 +260,23 @@ class UsersTable:
                 return user.api_key
         except Exception:
             return None
+        
+    def get_user_message_limit(self, id: str) -> int:
+        try:
+            with get_db() as db:
+                user = db.query(User).filter_by(id=id).first()
+                return user.message_limit
+        except Exception:
+            return None
+        
+    def update_user_message_limit_by_id(self, id: str, message_limit: str) -> str:
+        try:
+            with get_db() as db:
+                result = db.query(User).filter_by(id=id).update({"message_limit": message_limit})
+                db.commit()
+                return True if result == 1 else False
+        except Exception:
+            return False
 
 
 Users = UsersTable()
