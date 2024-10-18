@@ -11,6 +11,8 @@
 
 	import { showOverview, showControls, showArtifacts, mobile } from '$lib/stores';
 	import { flyAndScale } from '$lib/utils/transitions';
+	
+	import { user } from '$lib/stores';
 
 	import Dropdown from '$lib/components/common/Dropdown.svelte';
 	import Tags from '$lib/components/chat/Tags.svelte';
@@ -84,7 +86,11 @@
 		});
 		saveAs(blob, `chat-export-${Date.now()}.json`);
 	};
+
+	$: messageLimit = $user.message_limit ?? 'Loading...';
 </script>
+
+<div>{messageLimit} Messages Left</div>
 
 <Dropdown
 	on:change={(e) => {
@@ -94,7 +100,6 @@
 	}}
 >
 	<slot />
-
 	<div slot="content">
 		<DropdownMenu.Content
 			class="w-full max-w-[200px] rounded-xl px-1 py-1.5 border border-gray-300/30 dark:border-gray-700/50 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg"
